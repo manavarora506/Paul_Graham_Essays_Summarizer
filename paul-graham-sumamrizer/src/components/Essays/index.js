@@ -2,24 +2,60 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 
 function Essay({ title, date, body }) {
+  const [summary, setSummary] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const getSummary = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/summarize', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text: body }),
+      });
+      const data = await response.json();
+      setSummary(data.summary);
+    } catch (error) {
+      console.error("Error during summary fetch: ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="px-2 md:px-8 py-4" id={title.replaceAll(" ", "-")}>
       {/* Title */}
-      <div className="flex">
+      <div className="flex justify-between items-center">
         <p className="text-3xl font-semibold max-w-max dark:text-gray-200">
           {title}
         </p>
+        <button 
+          onClick={getSummary} 
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          disabled={loading}
+        >
+          {loading ? "Loading..." : "Summarize"}
+        </button>
       </div>
 
       {/* Date */}
-      <div className="mb-2 overflow-hidden">
+      <div className="mb-2">
         <p className="text-xl py-1 dark:text-gray-300">{date}</p>
       </div>
 
       {/* Body */}
-      <div className="mb-2 overflow-hidden">
+      <div className="mb-2">
         <p className="text-xl py-1 dark:text-gray-300">{body}</p>
       </div>
+
+      {/* Summary */}
+      {summary && (
+        <div className="mt-4 p-4 border border-gray-200 rounded">
+          <p className="text-lg dark:text-gray-300">{summary}</p>
+        </div>
+      )}
     </div>
   );
 }
