@@ -8,7 +8,7 @@ function Essay({ title, date, body }) {
   const getSummary = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/summarize', {
+      const response = await fetch('/.netlify/functions/summarize_essay', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
