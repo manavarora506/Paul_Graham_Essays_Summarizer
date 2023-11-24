@@ -1,10 +1,12 @@
 from flask import Flask, request, jsonify
 from langchain.llms import OpenAI
+from flask_cors import CORS  # Import the CORS library
 import os
 from langchain.chains.summarize import load_summarize_chain
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 app = Flask(__name__)
+CORS(app)
 
 openai_api_key = os.environ.get('OPENAI_KEY')
 
