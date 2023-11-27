@@ -5,7 +5,7 @@ exports.handler = async function(event, context) {
   const text = body.text;
 
   // Replace 'YOUR_FLASK_SERVER_URL' with the URL of your deployed Flask server
-  const response = await fetch('http://127.0.0.1:5000/summarize_essay', {
+  const response = await fetch('https://my-paul-graham-app-cebf5d007a10.herokuapp.com/summarize_essay', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
